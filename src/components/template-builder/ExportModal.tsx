@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_URL } from '@/config/api';
 import { Copy, UploadCloud, X, Check, Loader2 } from 'lucide-react';
 import {
   Dialog,
@@ -42,7 +43,7 @@ export function ExportModal({ isOpen, onClose, json, onUploadedSuccess }: Export
 
     try {
       setIsUploading(true);
-      const res = await fetch('/api/templates', {
+      const res = await fetch(`${API_URL}/api/templates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed),

@@ -1,6 +1,7 @@
 import { GenerationResponse, SingleGreetingRequest } from '@/types/greeting';
+import { API_URL } from '@/config/api';
 
-const API_BASE = '/api/greetings';
+const API_BASE = `${API_URL}/api/greetings`;
 
 export async function generateSingleGreeting(data: SingleGreetingRequest): Promise<GenerationResponse> {
   const response = await fetch(`${API_BASE}/single`, {

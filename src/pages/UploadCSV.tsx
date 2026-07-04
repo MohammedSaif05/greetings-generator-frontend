@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { API_URL } from '@/config/api';
 import { FileSpreadsheet, Upload, Send, AlertCircle, CheckCircle2, User, Calendar, MessageSquare, PenLine } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -253,7 +254,7 @@ export default function UploadCSV() {
     try {
       setIsLoadingTemplates(true);
       setTemplatesError(null);
-      const res = await fetch('/api/templates');
+      const res = await fetch(`${API_URL}/api/templates`);
       if (!res.ok) {
         throw new Error(`Failed to load templates (${res.status})`);
       }

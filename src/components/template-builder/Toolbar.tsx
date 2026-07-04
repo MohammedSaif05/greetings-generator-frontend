@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { API_URL } from '@/config/api';
 import { Upload, Plus, Download, Trash2, ChevronDown, User, Gift, MessageSquare, Pen, Loader2 } from 'lucide-react';
 import type { TemplateState, Orientation } from '@/types/template';
 import { PREDEFINED_TEXT_AREA_IDS } from '@/types/template';
@@ -114,7 +115,7 @@ export function Toolbar({
       const formData = new FormData();
       formData.append('file', state.backgroundImageFile);
 
-      const res = await fetch('/api/templates/assets', {
+      const res = await fetch(`${API_URL}/api/templates/assets`, {
         method: 'POST',
         body: formData,
       });
