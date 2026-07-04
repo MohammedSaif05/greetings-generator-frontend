@@ -125,7 +125,17 @@ export function Toolbar({
         throw new Error(`Asset upload failed (${res.status}): ${text || res.statusText}`);
       }
 
-      const asset: { assetId: string; imageUrl: string } = await res.json();
+      const responseText = await res.text();
+      if (!responseText) {
+        throw new Error('Asset upload returned an empty response. Please check if the Cloudflare R2 credentials are configured correctly on the backend.');
+      }
+
+      let asset: { assetId: string; imageUrl: string };
+      try {
+        asset = JSON.parse(responseText);
+      } catch {
+        throw new Error(`Asset upload returned invalid JSON: ${responseText.substring(0, 200)}`);
+      }
 
       const output = {
         templateId: state.templateId,
