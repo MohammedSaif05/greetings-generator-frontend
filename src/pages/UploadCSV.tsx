@@ -48,7 +48,6 @@ export default function UploadCSV() {
     message: '',
     senderName: '',
   });
-  const [bulkTemplateId, setBulkTemplateId] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
@@ -65,10 +64,7 @@ export default function UploadCSV() {
     [templates, formData.templateId]
   );
 
-  const selectedTemplateForBulk = useMemo(
-    () => templates.find(t => t.templateId === bulkTemplateId) || null,
-    [templates, bulkTemplateId]
-  );
+
 
   const isSingleFormComplete = useMemo(
     () =>
@@ -146,24 +142,14 @@ export default function UploadCSV() {
       return;
     }
 
-    if (!bulkTemplateId.trim()) {
-      toast({
-        title: "Template ID Required",
-        description: "Please enter a Template ID.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsGenerating(true);
     setGeneratedResults([]);
 
     try {
-      const response = await generateBulkGreetings(uploadedFile, bulkTemplateId.trim());
+      const response = await generateBulkGreetings(uploadedFile);
 
       if (response.status === 'SUCCESS' && response.results.length > 0) {
         setGeneratedResults(response.results);
-        setBulkTemplateId('');
         toast({
           title: "Success!",
           description: `Generated ${response.generated} greeting card${response.generated !== 1 ? 's' : ''}.`,
@@ -285,8 +271,6 @@ export default function UploadCSV() {
   const handleTemplateSelect = (template: TemplateSummary) => {
     if (mode === 'single') {
       setFormData(prev => ({ ...prev, templateId: template.templateId }));
-    } else {
-      setBulkTemplateId(template.templateId);
     }
     setIsTemplateDialogOpen(false);
   };
@@ -520,30 +504,15 @@ export default function UploadCSV() {
               </div>
 
               <div className="mt-6 space-y-2">
-                {selectedTemplateForBulk && (
-                  <p className="text-xs text-muted-foreground">
-                    Template: {selectedTemplateForBulk.templateId} · {selectedTemplateForBulk.orientation.charAt(0).toUpperCase() + selectedTemplateForBulk.orientation.slice(1)} · {selectedTemplateForBulk.canvas.width} × {selectedTemplateForBulk.canvas.height}
-                  </p>
-                )}
-                {!bulkTemplateId.trim() ? (
-                  <Button
-                    size="lg"
-                    onClick={openTemplateDialog}
-                    className="w-full h-12 text-base font-medium shadow-sm hover:shadow-md transition-all"
-                  >
-                    Choose Template
-                  </Button>
-                ) : (
-                  <Button
-                    size="lg"
-                    onClick={handleBulkSubmit}
-                    disabled={isGenerating || !uploadedFile || !!fileError}
-                    className="w-full h-12 text-base font-medium shadow-sm hover:shadow-md transition-all"
-                  >
-                    <Send className="w-4 h-4 mr-2" />
-                    Generate Now
-                  </Button>
-                )}
+                <Button
+                  size="lg"
+                  onClick={handleBulkSubmit}
+                  disabled={isGenerating || !uploadedFile || !!fileError}
+                  className="w-full h-12 text-base font-medium shadow-sm hover:shadow-md transition-all"
+                >
+                  <Send className="w-4 h-4 mr-2" />
+                  Generate Now
+                </Button>
               </div>
 
               {/* CSV Format Guide */}
@@ -552,10 +521,10 @@ export default function UploadCSV() {
                   CSV Format Guide
                 </h4>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Your CSV file should include the following columns:
+                  Your CSV file must include the following columns:
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {['recipientName', 'occasion', 'message', 'senderName'].map((field) => (
+                  {['templateId', 'recipientName', 'occasion', 'message', 'senderName'].map((field) => (
                     <span
                       key={field}
                       className="inline-flex px-2.5 py-1 bg-background rounded-md text-xs font-mono text-muted-foreground border border-border/50"

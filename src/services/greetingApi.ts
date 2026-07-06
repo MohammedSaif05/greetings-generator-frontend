@@ -20,10 +20,9 @@ export async function generateSingleGreeting(data: SingleGreetingRequest): Promi
   return response.json();
 }
 
-export async function generateBulkGreetings(file: File, templateId: string): Promise<GenerationResponse> {
+export async function generateBulkGreetings(file: File): Promise<GenerationResponse> {
   const formData = new FormData();
   formData.append('File', file);
-  formData.append('templateId', templateId);
 
   const response = await fetch(`${API_BASE}/bulk`, {
     method: 'POST',
