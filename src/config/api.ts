@@ -8,5 +8,5 @@
  * so we need the full backend URL.
  */
 export const API_URL = import.meta.env.PROD
-  ? 'https://greetings-generator.onrender.com'
+  ? 'https://greetings-generator-backend.onrender.com'
   : '';

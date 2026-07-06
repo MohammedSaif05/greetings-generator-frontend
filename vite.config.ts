@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     proxy: {
       // Avoid CORS in dev by proxying API requests through Vite
       "/api": {
-        target: "https://greetings-generator.onrender.com",
+        target: "https://greetings-generator-backend.onrender.com",
         changeOrigin: true,
         secure: true,
       },
