@@ -77,10 +77,10 @@ const FONT_FILES = [
   'Yellowtail-Regular.ttf',
 ];
 
-// Font file paths - using relative paths that Vite will resolve
+// Font file paths - served from public/fonts/ directory
 function getFontPath(filename: string): string {
-  // In Vite, files in src/ are accessible via /src/ path
-  return `/src/font/${filename}`;
+  // Files in public/ are served at the root in both dev and production
+  return `/fonts/${filename}`;
 }
 
 export const LOCAL_FONTS: LocalFont[] = FONT_FILES.map((file) => ({
